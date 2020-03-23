@@ -1,62 +1,78 @@
 #include <stdio.h>
 #include <stdlib.h>
-#define HNULL NULL
 
-struct Cell 
+typedef struct Cells
 {
-    int value;
-    struct Cell* next;
-};
+  int car; // would be a void* one day
+  struct Cells* cdr;
+} Cell;
 
-struct Cell* list(int values[], size_t valuesc)
+Cell* cons(int x, void* y)
 {
-    size_t count = valuesc / sizeof(int) - 1;
-    struct Cell* first = malloc(sizeof(struct Cell));
-    struct Cell* temp = first;
+  Cell* c = malloc(sizeof(Cell));
+  c->car = x;
+  c->cdr = y;
+  return c;
+}
 
-    for (int i = 0; i < count; i++) {
-        temp->value = values[i]; 
-        temp->next = malloc(sizeof(struct Cell));
-        temp = temp->next;
+Cell* list(int values[], size_t valsize)
+{
+  Cell* c = NULL;
+  size_t count = valsize / sizeof(int) - 1;
+  for (int i=count; i >= 0; i--) {
+    c = cons(values[i], c);
+  }
+  return c;
+}
+
+Cell* joinl(Cell* x, Cell* y)
+{
+  if (x != y) {
+    Cell* cu_x = x;
+    while (cu_x->cdr != NULL) {
+      cu_x = cu_x->cdr;
     }
-
-    temp->value = values[count]; 
-    temp->next = HNULL;
-
-    return first;
+    cu_x->cdr = y;
+  }
+  return x;
 }
 
-int car(struct Cell* list)
+Cell* copyl(Cell* x)
 {
-    return list->value;
+  if (x->cdr == NULL) {
+    return x;
+  }
+  Cell* cu_x = x;
+  Cell* cu_y = cons(cu_x->car, NULL);
+  Cell* y = cu_y;    
+  Cell* nx_y;
+  
+  do {
+    cu_x = cu_x->cdr;
+    nx_y = cons(cu_x->car, NULL);
+    cu_y->cdr = nx_y;
+    cu_y = nx_y;
+  } while (cu_x->cdr != NULL);
+  
+  return y;    
 }
 
-struct Cell* cdr(struct Cell* list)
+void putl(Cell* list)
 {
-    return list->next;     
-}
-
-void printlval(struct Cell* list)
-{
-    printf("%d", car(list));
-    if (cdr(list) != HNULL) {
-        printf(" ");
-        printlval(cdr(list));
-    }
-}
-
-void printl(struct Cell* list)
-{
-    printf("(");
-    if (cdr(list) != HNULL)
-        printlval(cdr(list));
-    printf(")");
+  printf("%d ", list->car);
+  if (list->cdr != NULL) {
+    putl(list->cdr);
+  } else {
+    puts("<list>");
+  }
 }
 
 int main(int argc, char* argv[])
 {
-    int a[] = {0, 1, 2, 3, 4, 5, 6};
-    struct Cell* al = list(a, sizeof(a));
-    printl(al);
-    return 0;
+  int a[] = {0, 1, 2, 3, 4, 5, 6};
+  Cell* al = list(a, sizeof(a));
+  Cell* bl = copyl(al);
+  putl(bl);
+  putl(joinl(al,bl));
+  return 0;
 }
