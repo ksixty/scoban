@@ -1,0 +1,19 @@
+* Scoban LISP
+An exercise in C and interpretators. Also a joke that went too far.
+
+** Progress
+| `car`    | trivial          |
+| `cdr`    | trivial          |
+| `list`   | in progress      |
+| `read`   | _am_             |
+| `eval`   | _I_              |
+| `print`  | _a_              |
+| `apply`  | _joke_           |
+| `lambda` | _to_             |
+| `cond`   | _you?_           |
+
+** Goals
+0. Be honest–no cheating!
+1. Make it work
+2. Learn about closures/bindings on the way
+3. ...

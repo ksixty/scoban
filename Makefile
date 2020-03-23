@@ -1,8 +1,17 @@
-fmr:
-	gcc fmr.c -o fmr
+CC ?= gcc
 
-run: fmr
-	./fmr
+OBJECTS = $(patsubst src/%.c,build/%.o,$(wildcard src/*.c))
 
-clean: fmr
-	rm fmr
+all: build/scoban
+
+build:
+	mkdir -p build
+
+clean:
+	rm -rf build
+
+build/scoban: $(OBJECTS)
+	$(CC) -g -o $@ $^
+
+build/%.o: src/%.c | build
+	$(CC) -Og -c -o $@ $<
