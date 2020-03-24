@@ -8,11 +8,13 @@ Scoban expressions in them and something with them.
 *** Data types
 
  Your average lisp comprises such atomic data types (and so that's what we want Scoban to have):
- | type             | description                   | example               |
- |------------------+-------------------------------+-----------------------|
- | boolean          | true or false value           | ~#t~, ~#f~            |
- | integer          | self-evaluating number        | ~1~, ~-65536~         |
- | symbol           | sequence of UTF-8 characters  | ~car~, ~#t~, ~¡Жопа!~ |
+ | type    | description                   | example               |
+ |---------+-------------------------------+-----------------------|
+ | boolean | true or false value           | ~#t~, ~#f~            |
+ | integer | self-evaluating number        | ~1~, ~-65536~         |
+ | symbol  | immutable sequence of C chars | ~car~, ~#t~, ~¡Жопа!~ |
+ | string  | mutable sequence of C chars   | ~"Это интересно"~     |
+ | list    | ??                            |                       |
 
  Out of them with a bit of magic we can produce compound data types:
  | type   | description                          | example                                    |
