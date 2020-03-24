@@ -1,4 +1,4 @@
-** Scoban implementation guide
+* Scoban implementation guide
 
 ** Going up
 
