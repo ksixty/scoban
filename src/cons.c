@@ -2,26 +2,23 @@
 #include "cons.h"
 
 // makes a cons
-Cell * cons(int x, void * y)
+Cell* cons(int x, void* y)
 {
-  Cell * c = malloc(sizeof(Cell));
-  if (c = NULL) {
-    return -1;
-  }
+  Cell* c = malloc(sizeof(Cell));
   c->car = x;
   c->cdr = y;
   return c;
 }
 
 // copies a full list
-Cell * cons_copy(Cell * x)
+Cell* cons_copy(Cell* x)
 {
   if (x->cdr == NULL) {
     return x;
   }
-  Cell * cu_x = x;
-  Cell * cu_y = cons(cu_x->car, NULL);
-  Cell * y = cu_y;
+  Cell* cu_x = x;
+  Cell* cu_y = cons(cu_x->car, NULL);
+  Cell* y = cu_y;
   Cell* nx_y; // next yu
 
   do {
@@ -36,10 +33,10 @@ Cell * cons_copy(Cell * x)
 }
 
 // mutates x, y into a joint list
-Cell * cons_join(Cell * x, Cell * y)
+Cell* cons_join(Cell* x, Cell* y)
 {
   if (x != y) {
-    Cell * cu_x = x;
+    Cell* cu_x = x;
     while (cu_x->cdr != NULL) {
       cu_x = cu_x->cdr;
     }
