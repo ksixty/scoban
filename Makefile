@@ -14,4 +14,4 @@ build/scoban: $(OBJECTS)
 	$(CC) -g -o $@ $^
 
 build/%.o: src/%.c | build
-	$(CC) -Og -c -o $@ $<
+	$(CC) -Og -c -std=c11 -o $@ $<

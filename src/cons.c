@@ -5,6 +5,9 @@
 Cell * cons(int x, void * y)
 {
   Cell * c = malloc(sizeof(Cell));
+  if (c = NULL) {
+    return -1;
+  }
   c->car = x;
   c->cdr = y;
   return c;
