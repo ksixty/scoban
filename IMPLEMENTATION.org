@@ -1,0 +1,58 @@
+** Scoban implementation guide
+
+** Going up
+
+Scoban would be an interpreter. I.e., we want it to be able to read strings with
+Scoban expressions in them and something with them.
+
+*** Data types
+
+ Your average lisp comprises such atomic data types (and so that's what we want Scoban to have):
+ | type            | description                   | example               |
+ |-----------------+-------------------------------+-----------------------|
+ | boolean         | true or false value           | ~#t~, ~#f~            |
+ | integer         | self-evaluating number        | ~1~, ~-65536~         |
+ | UTF-8 character | self-evaluating unicode point | ~\Ж~, ~\space~        |
+ | symbol          | sequence of UTF-8 characters  | ~car~, ~#t~, ~¡Жопа!~ |
+
+ Out of them with a bit of magic we can produce compound data types:
+ | type   | description                        | example                                    |
+ |--------+------------------------------------+--------------------------------------------|
+ | cell   | set of two values, ~car~ and ~cdr~ | ~(a . b)~                                  |
+ | nil    | set with ~cdr~ pointing to ~NULL~  | ~()~                                       |
+ | list   | chain of cells                     | ~(1 2 3)~, ~(cond 1 (cond 2 (cond 3 ())))~ |
+ | string | (mutable?) sequence of characters  | ~String are vowen by spiders.~             |
+
+*** Parser and ~read~
+
+First of all, we need to build a parser of Scoban expressions. It would take an arbitraty –
+possibly valid – expression, and return a thing we would be able to execute.
+
+We also need a ~read~ function that would recursively convert an expression into atomic datum 
+in some order.
+
+*** Primitives
+
+ To get a working ~eval~, we must introduce some building blocks.
+ According to St. Graham, there are seven essential primitives:
+ 1. ~car~
+ 2. ~cdr~
+ 3. ~cons~
+ 4. ~cond~
+ 5. ~quote~
+ 6. ~atom~
+ 7. ~eq~
+
+With all of that, building an interpreter would mean defining a Scoban  
+
+
+** Building an interpreter
+
+We would need these:
+1. [[https://upload.wikimedia.org/wikipedia/commons/7/78/Fes.jpg]]
+2. A dark brown felt jacket
+
+So get would get this:
+https://upload.wikimedia.org/wikipedia/commons/0/0e/Jerry_Sussman.jpg
+
+That's all there is to an interpreter.

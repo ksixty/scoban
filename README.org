@@ -1,5 +1,5 @@
 * Scoban LISP
-An exercise in C and interpretators. Also a joke that went too far.
+An exercise in C and interpreters. Also a joke that went too far.
 
 ** Progress (in progress)
 | ~car~    | returns first element of a list    | trivial |
