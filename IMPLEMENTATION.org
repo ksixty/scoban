@@ -43,7 +43,8 @@ in some order.
  6. ~atom~
  7. ~eq~
 
-With all of that, building an interpreter would mean defining a Scoban  
+We also need a way to define things and a `lambda`, so we could define functions and thusly define 
+~(eval)~, ~(apply)~, ~(bind)~ etc.
 
 
 ** Building an interpreter
