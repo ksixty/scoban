@@ -2,9 +2,16 @@
 #include "atom.h"
 #include "cons.h"
 #include "read.h"
+#include <stdio.h>
 
 int main(int argc, char* argv[])
 {
-  read("(car 1 2 3)");
+  char input[ARBITRARY_NUMBER];
+  char* line;
+  do {
+    printf("> ");
+    line = fgets(input, ARBITRARY_NUMBER, stdin);
+    read(input);
+  } while(line != NULL);
   return 0;
 }

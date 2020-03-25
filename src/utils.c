@@ -30,6 +30,6 @@ void append_digit(int* num, int digit)
 
 int next_char(char** c)
 {
-  *c = *c + sizeof(char);
+  ++(*c);
   return **c;
 }

@@ -4,6 +4,9 @@ OBJECTS = $(patsubst src/%.c,build/%.o,$(wildcard src/*.c))
 
 all: build/scoban
 
+run: clean build/scoban
+	build/scoban
+
 build:
 	mkdir -p build
 
