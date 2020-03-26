@@ -1,8 +1,8 @@
 #include <stdlib.h>
-#include "cons.h"
+#include "data.h"
 
 // makes a cons
-Cell* cons(int x, void* y)
+Cell* cons(Atom* x, Cell* y)
 {
   Cell* c = malloc(sizeof(Cell));
   c->car = x;

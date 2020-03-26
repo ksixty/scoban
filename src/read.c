@@ -2,10 +2,10 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
-#include "utils.h"
-#include "atom.h"
-#include "cons.h"
+#include <errno.h>
+#include "data.h"
 #include "read.h"
+#include "utils.h"
 
 int read_isnum(char s)
 {
@@ -27,145 +27,124 @@ int read_isboo(char s)
   return (s == '#');
 }
 
-Atom* read(char* input) {
-  Atom* v = malloc(sizeof(Atom) * ARBITRARY_NUMBER);
-  char* c = input;
+int read_isend(char* c) {
   do {
-    v->type = T_NUL;
-    if (isspace(*c)) {
+    if(*c == '\0') {
+      return true;
+    }
+    if(!isspace(*c)) {
+      return false;
+    }
+  } while(next_char(&c));
+  return true;
+}
+
+// TODO: separate read into read and read_once (read_token?)
+//       so that we could parse multiple tokens at once
+
+Atom* read(char* input) {
+  do {
+    if (isspace(*input)) {
       ;
-    } else
-    if (read_isnum(*c)) {
-      read_num(&c);
-      break;
-    } else
-    if (isalnum(*c)) {
-      read_sym(&c);
-      break;
-    } else
-    if (read_isstr(*c)) {
-      read_str(&c);
-      break;
-    } else
-    if (read_islst(*c)) {
-      read_lst(&c);
-    } else
-    if (read_isboo(*c)) {
-      read_boo(&c);
-    }else {
-      printf("Error: unexpected token `%c`\n", *c);
-      break;
-    }
-    if (v->type != T_NUL) {
-      v = v + sizeof(Atom);
-    }
-  } while (next_char(&c));
-  
-  return v;
-}
-
-Atom read_boo(char** c)
-{
-  Atom* a = malloc(sizeof(Atom));
-  char val = next_char(c);
-  a->type = T_NUL;
-  if (isspace(next_char(c))) {
-    if (val == 't') { 
-      a->type = T_BOO;
-      a->val.boo = true;
-      printf("#%c\n", val);
-    } else if (val == 'f') {
-      a->type = T_BOO;
-      a->val.boo = false;
-      printf("#%c\n", val);	
+    } else if (read_isnum(*input)) {
+      return read_num(input);
+    } else if (isalnum(*input)) {
+      return read_sym(input);
+    } else if (read_isstr(*input)) {
+      return read_str(input);
+    } else if (read_islst(*input)) {
+      return read_lst(input);
+    } else if (read_isboo(*input)) {
+      return read_boo(input);
     } else {
-      printf("Error: unexpected boolean value.\n");
+      printf("Error: unexpected token `%c`\n", *input);
+      return NULL;
     }
-  }
-  return *a;
+  } while (next_char(&input));
+  return NULL;
 }
 
-Atom read_num(char** c)
+Atom* read_boo(char* c)
 {
-  Atom* a = malloc(sizeof(Atom));
-  bool negative = false;
-  int val;
-  
-  if (**c == '-') {
-    negative = true;
+  char val = next_char(&c);
+  if (read_isend(++c)) {
+    if (val == 't' || val == 'f') {
+	Atom* a = malloc(sizeof(Atom));
+	a->type = T_BOO;
+	a->val.boo = (val == 't');
+	printf("#%c\n", val);
+	return a;
+    } else {
+      printf("Error: invalid value for a boolean\n");
+    }
+  } else {
+    printf("Error: unexpected token\n");
   }
-  
-  val = atoi(*c);
-
-  a->type = T_NUM;
-  a->val.num = negative ? -val : val;
-  printf("%d\n", val);
-  return *a;
+  return NULL;
 }
 
-Atom read_sym(char** c)
+Atom* read_num(char* c)
 {
-  Atom* a = malloc(sizeof(Atom));
-  char buffer[ARBITRARY_NUMBER];
-  int i = 0;
-  
-  do { 
-    if (i >= ARBITRARY_NUMBER || read_isstr(**c)) {
-      printf("Error: illegal symbol\n");
-      break;
-    }
-    if (isspace(**c)) {
-      break;
-    }
-    buffer[i] = **c;
-    i++;
-  } while(next_char(c));
-
-  size_t strsize = i++ * sizeof(char);
-
-  a->type = T_STR;
-  a->val.str = malloc(strsize);
-  memcpy(a->val.str, buffer, strsize);
-  printf("%s\n", a->val.str);
-  return *a;
+  while (*c == '0') {
+    // trim leading zeros so strtol
+    // won't convert input to base 8
+    next_char(&c);
+  }
+  errno = 0;
+  char* end = NULL;
+  long val = strtol(c, &end, 0);
+  if (read_isend(end) && !errno) {
+    Atom* a = malloc(sizeof(Atom));
+    a->type = T_NUM;
+    a->val.num = val;
+    printf("%ld\n", a->val.num);
+    return a;
+  }
+  printf("Error: invalid value for a number\n");
+  return NULL;
 }
 
-Atom read_str(char** c)
+Atom* read_sym(char* c)
 {
-  Atom* a = malloc(sizeof(Atom));
-  char buffer[ARBITRARY_NUMBER];
-  int i = 0;
-  bool closed = false;
-  
-  while (next_char(c)) {
-    if (i >= ARBITRARY_NUMBER || read_isstr(**c)) {
-      closed = true;
-      break;
+  char* str = strsep(&c, SYM_DELIM);
+  if (c == NULL || read_isend(c))
+    if (!strpbrk(str, STR_DELIM)) {
+      printf("[%s]\n", str);
+      Atom* a = malloc(sizeof(Atom));
+      a->type = T_STR;
+      a->val.str = strdup(str);
+      printf("%s\n", a->val.str);
+      return a;
     }
-    buffer[i] = **c;
-    i++;
-  }
-  if (i == 1) {
-    printf("Error: zero-length string\n");
-    a->type = T_NUL;
-    return *a;
-  }
-  if (!closed) {
-    printf("Error: no `\"` to match\n");
-    return *a;
-  }
-  buffer[i] = '\0';
-  size_t strsize = i++ * sizeof(char);
-
-  a->type = T_STR;
-  a->val.str = malloc(strsize);
-  memcpy(a->val.str, buffer, strsize);
-  printf("\"%s\"\n", a->val.str);
-  return *a;
+  printf("Error: invalid value for a symbol\n");
+  return NULL;
 }
 
-Atom read_lst(char** c)
+Atom* read_str(char* c)
 {
-  printf("lst %c\n", **c);
-  return *(Atom*)(malloc(sizeof(Atom)));
+  next_char(&c);
+  char* start = strsep(&c, STR_DELIM);
+  if (c == NULL || read_isend(c)) {
+    Atom* a = malloc(sizeof(Atom));
+    a->type = T_STR;
+    a->val.str = strdup(start);
+    printf("\"%s\"\n", a->val.str);
+    return a;
+  }
+  printf("Error: invalid value for a string\n");
+  return NULL;
+}
+
+Atom* read_lst(char* c)
+{
+  next_char(&c);
+  char* body = strsep(&c, SEXP_END);
+  char* input;
+  if (c == NULL || read_isend(c)) {
+    do {
+	input = strsep(&body, SYM_DELIM);
+	read(input);
+    } while (body);
+  }
+  return NULL;
 }
