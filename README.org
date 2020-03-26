@@ -2,23 +2,16 @@
 An exercise in C and interpreters. Also a joke that went too far.
 
 ** Progress (in progress)
-| ~car~    | returns first element of a list    | trivial |
-| ~cdr~    | returns the rest of a list         | trivial |
-| ~cons~   | constructs a ~Cell~                | done    |
-| ~list✝~  | returns a ~Cell~ list from C array | mocked  |
-| ~read~   | *to read means to exist*           |         |
-| ~print~  | produces a side-effect             |         |
-| ~quote~  | returns x                          |         |
-| ~atom~   | true if arg is an atom/empty list  |         |
-| ~eq~     | tests whether two values are equal |         |
-| ~eval~   | prepares a thing for application   |         |
-| ~apply~  | prepares a thing for evaluation    |         |
-| ~lambda~ | a greek letter                     |         |
-| ~cond~   | not a letter                       |         |
-
-** Goals
-0. Be honest–no cheating!
-1. Make it work
-2. Learn about closures/bindings on the way
-3. ...
-
+| ~car~    | returns first element of a list    | trivial     |
+| ~cdr~    | returns the rest of a list         | trivial     |
+| ~cons~   | constructs a ~Cell~                | done        |
+| ~list✝~  | returns a ~Cell~ list from C array | ~read_lst~  |
+| ~read~   | *to read means to exist*           | almost done |
+| ~print~  | produces a side-effect             | trivial     |
+| ~quote~  | returns x                          |             |
+| ~atom~   | true if arg is an atom/empty list  | trivial     |
+| ~eq~     | tests whether two values are equal | trivial     |
+| ~eval~   | prepares a thing for application   |             |
+| ~apply~  | prepares a thing for evaluation    |             |
+| ~lambda~ | a greek letter                     |             |
+| ~cond~   | not a letter                       |             |
