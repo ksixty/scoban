@@ -39,8 +39,14 @@ int read_isend(char* c) {
   return true;
 }
 
-// TODO: separate read into read and read_once (read_token?)
-//       so that we could parse multiple tokens at once
+/*
+  TODO: make read work with streams
+
+  1. read_stream
+  2. don't mutate input -- copy it instead
+  3. check if the input is over, otherwise
+     fail and re-read()
+*/
 
 Atom* read(char* input) {
   do {
