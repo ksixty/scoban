@@ -12,10 +12,7 @@
 
 int main(int argc, char* argv[])
 {
-	char input[ARBITRARY_NUMBER];
-	char* line;
 	printf("SCOBAN v%s\n", SKOBAN_VERSION);
-	line = fgets(input, ARBITRARY_NUMBER, stdin);
-	read(input);
+	read(stdin);
 	return 0;
 }

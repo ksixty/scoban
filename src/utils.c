@@ -25,3 +25,7 @@ int next_char(char** c)
 }
 
 void error(int e)
+{
+	printf("Error %d\n", e);
+	exit(1);
+}

@@ -1,22 +1,17 @@
 #pragma once
+#include <stdio.h>
 #include "data.h"
 #define ARBITRARY_NUMBER 1024
+#define BOO_VALS "tf"
+#define SYM_VALS "+=_-)(*&^%$#@!~<>\\|/~"
 
-#define STR_DELIM "\""
-#define SYM_DELIM "\t\n\v\f\r \0"
-#define SEXP_END ")"
+char peek(FILE* i);
 
-int read_isnum(char s);		// [0-9] or -
-int read_isboo(char s);		// #
-int read_isstr(char s);		// (
-int read_islst(char s);		// "
+Atom* read_boo(FILE* i);
+Atom* read_num(FILE* i);
+Atom* read_sym(FILE* i);
+Atom* read_str(FILE* i);
+Atom* read_lst(FILE* i);
+Atom* read_quo(FILE* i);
 
-int read_isend(char* c);	// token must end with whitespace
-
-Atom* read_boo(char* c);
-Atom* read_num(char* c);
-Atom* read_sym(char* c);
-Atom* read_str(char* c);
-Atom* read_lst(char* c);
-
-Atom* read(char* input);
+Atom* read(FILE* i);

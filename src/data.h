@@ -29,9 +29,8 @@ struct Atom {
 };
 
 const static Atom nil = {
-	.at_type = T_NIL;
-	.val.nil = NULL;
-}
+	T_NIL
+};
 
 struct Cell {
 	Atom* car;
