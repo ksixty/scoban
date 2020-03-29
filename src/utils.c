@@ -23,3 +23,5 @@ int next_char(char** c)
 	++(*c);
 	return **c;
 }
+
+void error(int e)
